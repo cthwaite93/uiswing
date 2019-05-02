@@ -34,6 +34,7 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	private JTextField jtfb;
 	private JTextField jtfg;
 	private Canvas cv;
+	private JDialog d;
 	
 	private void setLookAndFeel() {
 		try {
@@ -193,11 +194,15 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	}
 	
 	private void errorDialog(String s) {
-		JDialog d = new JDialog(this, "Error");
+		d = new JDialog(this, "Error");
 		JPanel jp = new JPanel();
 		JLabel jl = new JLabel(s);
+		JButton bc = new JButton("Close");
+		bc.setPreferredSize(buttonDimensions);
+		bc.addActionListener(this);
 		jl.setFont(jl.getFont().deriveFont(Font.BOLD));
 		jp.add(jl);
+		jp.add(bc);
 		d.add(jp);
 		d.setSize(dialogDimensions);
 		d.setResizable(false);
@@ -247,6 +252,8 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		String s = e.getActionCommand();
 		if (s.equals("Draw")) {
 			drawPixel();
+		} else if (s.equals("Close")) {
+			d.dispose();
 		}
 		
 	}
