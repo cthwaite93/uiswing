@@ -3,20 +3,35 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
-public class PixelDrawer extends JFrame {
+public class PixelDrawer extends JFrame implements ActionListener {
 	
 	private static int width = 1024;
 	private static int height = 576;
 	private static Dimension buttonDimensions = new Dimension(100, 28);
+	
+	private JTextField jtfx;
+	private JTextField jtfy;
+	private JTextField jtfr;
+	private JTextField jtfb;
+	private JTextField jtfg;
+	private Canvas cv;
+	
 	
 	private void setLookAndFeel() {
 		try {
@@ -43,35 +58,133 @@ public class PixelDrawer extends JFrame {
 		setVisible(true);
 	}
 	
-	private JPanel optionsPanel() {
-		JPanel p = new JPanel();
-		JPanel p1 = new JPanel();
+	private JPanel optionsTitlePanel() {
+		JPanel titleP = new JPanel();
 		
-		p.setLayout(new GridLayout(6, 1));
-		p.setBorder(new EmptyBorder(25, 30, 25, 30));
+		JLabel jlt = new JLabel("Pixel options");
+		jlt.setFont(jlt.getFont().deriveFont(Font.BOLD));
+		titleP.add(jlt);
+		
+		return titleP;
+	}
+	
+	private JPanel posxPanel() {
+		JPanel posxP = new JPanel();
+		
+		JLabel jlx = new JLabel("X position: ");
+		jlx.setPreferredSize(buttonDimensions);
+		this.jtfx = new JTextField();
+		this.jtfx.setPreferredSize(buttonDimensions);
+		posxP.add(jlx);
+		posxP.add(this.jtfx);
+		
+		return posxP;
+	}
+	
+	private JPanel posyPanel() {
+		JPanel posyP = new JPanel();
+		
+		JLabel jly = new JLabel("Y position: ");
+		jly.setPreferredSize(buttonDimensions);
+		this.jtfy = new JTextField();
+		this.jtfy.setPreferredSize(buttonDimensions);
+		posyP.add(jly);
+		posyP.add(this.jtfy);
+		
+		return posyP;
+	}
+	
+	private JPanel colrPanel() {
+		JPanel colrP = new JPanel();
+		
+		JLabel jlr = new JLabel("Red colour: ");
+		jlr.setPreferredSize(buttonDimensions);
+		this.jtfr = new JTextField();
+		this.jtfr.setPreferredSize(buttonDimensions);
+		colrP.add(jlr);
+		colrP.add(this.jtfr);
+		
+		return colrP;
+	}
+	
+	private JPanel colgPanel() {
+		JPanel colgP = new JPanel();
+		
+		JLabel jlg = new JLabel("Green colour: ");
+		jlg.setPreferredSize(buttonDimensions);
+		this.jtfg = new JTextField();
+		this.jtfg.setPreferredSize(buttonDimensions);
+		colgP.add(jlg);
+		colgP.add(this.jtfg);
+		
+		return colgP;
+	}
+	
+	private JPanel colbPanel() {
+		JPanel colbP = new JPanel();
+		
+		JLabel jlb = new JLabel("Blue colour: ");
+		jlb.setPreferredSize(buttonDimensions);
+		this.jtfb = new JTextField();
+		this.jtfb.setPreferredSize(buttonDimensions);
+		colbP.add(jlb);
+		colbP.add(this.jtfb);
+		
+		return colbP;
+	}
+	
+	private JPanel optionButtonsPanel() {
+		JPanel buttonsP = new JPanel();
 		
 		JButton bd = new JButton("Draw");
 		bd.setPreferredSize(buttonDimensions);
+		
 		JButton bc = new JButton("Clear");
 		bc.setPreferredSize(buttonDimensions);
-		p1.add(bd);
-		p1.add(bc);
 		
-		p.add(p1);
+		bd.addActionListener(this);
+		bc.addActionListener(this);
+		
+		buttonsP.add(bd);
+		buttonsP.add(bc);
+		
+		return buttonsP;
+	}
+	
+	private JPanel optionsPanel() {
+		JPanel p = new JPanel();
+		
+		//Configure layout of Panel
+		p.setLayout(new GridLayout(7, 1));
+		p.setBorder(new EmptyBorder(25, 30, 25, 30));
+		
+		//Add panels to options panel
+		p.add(optionsTitlePanel());
+		p.add(posxPanel());
+		p.add(posyPanel());
+		p.add(colrPanel());
+		p.add(colgPanel());
+		p.add(colbPanel());
+		p.add(optionButtonsPanel());
+		
 		return p;
 	}
 	
-	private Canvas canvasPanel() {
-		return new Canvas();
+	private JPanel canvasPanel() {
+		JPanel cvPanel = new JPanel();
+
+		this.cv = new Canvas();
+		cvPanel.add(this.cv);
+		//cvPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
+		cvPanel.setBackground(Color.WHITE);
+		
+		return cvPanel;
 	}
 	
 	private void constructLayout() {
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
-		
-		Canvas cv = new Canvas();
-		c.add(cv, BorderLayout.CENTER);
-		
+		c.add(canvasPanel(), BorderLayout.CENTER);
 		c.add(optionsPanel(), BorderLayout.WEST);
 	}
 	
@@ -80,6 +193,15 @@ public class PixelDrawer extends JFrame {
 		setLookAndFeel();
 		constructLayout();
 		initialize();
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String s = e.getActionCommand();
+		if (s.equals("Draw")) {
+			
+		}
+		
 	}
 	
 	public static void main(String[] args) {
