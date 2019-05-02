@@ -22,8 +22,11 @@ import javax.swing.border.EmptyBorder;
 public class PixelDrawer extends JFrame implements ActionListener {
 	
 	private static int width = 1024;
+	private static int optionsPanelWidth = 300;
+	private static int canvasWidth = width - optionsPanelWidth;
 	private static int height = 576;
 	private static Dimension buttonDimensions = new Dimension(100, 28);
+	private static Dimension dialogDimensions = new Dimension(450, 253);
 	
 	private JTextField jtfx;
 	private JTextField jtfy;
@@ -31,7 +34,6 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	private JTextField jtfb;
 	private JTextField jtfg;
 	private Canvas cv;
-	
 	
 	private void setLookAndFeel() {
 		try {
@@ -107,19 +109,6 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		return colrP;
 	}
 	
-	private JPanel colgPanel() {
-		JPanel colgP = new JPanel();
-		
-		JLabel jlg = new JLabel("Green colour: ");
-		jlg.setPreferredSize(buttonDimensions);
-		this.jtfg = new JTextField();
-		this.jtfg.setPreferredSize(buttonDimensions);
-		colgP.add(jlg);
-		colgP.add(this.jtfg);
-		
-		return colgP;
-	}
-	
 	private JPanel colbPanel() {
 		JPanel colbP = new JPanel();
 		
@@ -131,6 +120,19 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		colbP.add(this.jtfb);
 		
 		return colbP;
+	}
+	
+	private JPanel colgPanel() {
+		JPanel colgP = new JPanel();
+		
+		JLabel jlg = new JLabel("Green colour: ");
+		jlg.setPreferredSize(buttonDimensions);
+		this.jtfg = new JTextField();
+		this.jtfg.setPreferredSize(buttonDimensions);
+		colgP.add(jlg);
+		colgP.add(this.jtfg);
+		
+		return colgP;
 	}
 	
 	private JPanel optionButtonsPanel() {
@@ -155,6 +157,7 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		JPanel p = new JPanel();
 		
 		//Configure layout of Panel
+		p.setPreferredSize(new Dimension(300, height));
 		p.setLayout(new GridLayout(7, 1));
 		p.setBorder(new EmptyBorder(25, 30, 25, 30));
 		
@@ -163,8 +166,8 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		p.add(posxPanel());
 		p.add(posyPanel());
 		p.add(colrPanel());
-		p.add(colgPanel());
 		p.add(colbPanel());
+		p.add(colgPanel());
 		p.add(optionButtonsPanel());
 		
 		return p;
@@ -172,8 +175,9 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	
 	private JPanel canvasPanel() {
 		JPanel cvPanel = new JPanel();
-
+		cvPanel.setPreferredSize(new Dimension(canvasWidth, height));
 		this.cv = new Canvas();
+		this.cv.setPreferredSize(new Dimension(canvasWidth, height));
 		cvPanel.add(this.cv);
 		//cvPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
 		cvPanel.setBackground(Color.WHITE);
@@ -188,6 +192,49 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		c.add(optionsPanel(), BorderLayout.WEST);
 	}
 	
+	private void errorDialog(String s) {
+		JDialog d = new JDialog(this, "Error");
+		JPanel jp = new JPanel();
+		JLabel jl = new JLabel(s);
+		jl.setFont(jl.getFont().deriveFont(Font.BOLD));
+		jp.add(jl);
+		d.add(jp);
+		d.setSize(dialogDimensions);
+		d.setResizable(false);
+		d.setLocationRelativeTo(this);
+		d.setVisible(true);
+	}
+	
+	private Pixel createPixel() {	
+		Pixel p = null;
+		
+		try {
+			int x = Integer.parseInt(jtfx.getText().toString());
+			int y = Integer.parseInt(jtfy.getText().toString());
+			int r = Integer.parseInt(jtfr.getText().toString());
+			int b = Integer.parseInt(jtfb.getText().toString());
+			int g = Integer.parseInt(jtfg.getText().toString());
+			p = new Pixel(x, y, r, b, g);
+		} catch(NumberFormatException e) {
+			errorDialog("Textfields must have a value and value must be an integer.");
+		} catch (ColourRGBException e) {
+			errorDialog(e.getMessage());
+		} catch (PixelPositionException e) {
+			errorDialog(e.getMessage());
+		}
+		
+		return p;
+	}
+	
+	private void drawPixel() {
+		Pixel p = createPixel();
+		
+		//If there's no mistake
+		if (p != null) {
+			
+		}
+	}
+	
 	public PixelDrawer() {
 		super("Pixel Drawer");
 		setLookAndFeel();
@@ -199,7 +246,7 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String s = e.getActionCommand();
 		if (s.equals("Draw")) {
-			
+			drawPixel();
 		}
 		
 	}

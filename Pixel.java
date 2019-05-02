@@ -1,11 +1,32 @@
 
 public class Pixel {
 	
+	private static int maxX = 724;
+	private static int maxY = 576;
+	private static int min = 0;
+	
 	private int x;
 	private int y;
 	private ColourRGB colour;
 	
-	public Pixel(int x, int y, int r, int g, int b) throws ColourRGBException {
+	private String createExceptionMessage(int x, int y) {
+		String s = "";
+		if (x < min || x > maxX) {
+			s += "Value of position X = " + x + " out of bounds. ";
+		}
+		
+		if (y < min || y > maxY) {
+			s += "Value of position Y = " + y + " out of bounds. ";
+		}
+		
+		return s;
+	}
+	
+	public Pixel(int x, int y, int r, int g, int b) throws ColourRGBException, PixelPositionException {
+		if (x < min || x > maxX || y < min || y > maxY) {
+			throw new PixelPositionException(createExceptionMessage(x, y));
+		}
+		
 		this.x = x;
 		this.y = y;
 		this.colour = new ColourRGB(r, g, b);
@@ -39,16 +60,27 @@ public class Pixel {
 		return this.colour.getB();
 	}
 	
-	public void setPosition(int x, int y) {
+	public void setPosition(int x, int y) throws PixelPositionException {
+		if (x < min || x > maxX || y < min || y > maxY) {
+			throw new PixelPositionException(createExceptionMessage(x, y));
+		}
+		
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void setPositionX(int x) {
+	public void setPositionX(int x) throws PixelPositionException {
+		if (x < min || x > maxX) {
+			throw new PixelPositionException("Value of position X = " + x + " out of bounds.");
+		}
+		
 		this.x = x;
 	}
 	
-	public void setPositionY(int y) {
+	public void setPositionY(int y) throws PixelPositionException {
+		if (y < min || y > maxY) {
+			throw new PixelPositionException("Value of position Y = " + y + " out of bounds.");
+		}
 		this.y = y;
 	}
 	
