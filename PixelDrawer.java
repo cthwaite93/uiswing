@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +36,7 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	private JTextField jtfg;
 	private Canvas cv;
 	private JDialog d;
+	private Pixel p;
 	
 	private void setLookAndFeel() {
 		try {
@@ -195,20 +197,26 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	
 	private void errorDialog(String s) {
 		d = new JDialog(this, "Error");
+		
 		JPanel jp = new JPanel();
 		jp.setLayout(new GridLayout(2,1));
-		JPanel j1 = new JPanel();
-		JPanel j2 = new JPanel();
+		
+		JPanel jp1 = new JPanel();
+		JPanel jp2 = new JPanel();
+		
 		JLabel jl = new JLabel(s);
+		jl.setFont(jl.getFont().deriveFont(Font.BOLD));
+		
 		JButton bc = new JButton("Close");
 		bc.setPreferredSize(buttonDimensions);
 		bc.addActionListener(this);
-		jl.setFont(jl.getFont().deriveFont(Font.BOLD));
-		j1.add(jl);
-		j2.add(bc);
-		jp.add(j1);
-		jp.add(j2);
+		
+		jp1.add(jl);
+		jp2.add(bc);
+		jp.add(jp1);
+		jp.add(jp2);
 		d.add(jp);
+		
 		d.setSize(dialogDimensions);
 		d.setResizable(false);
 		d.setLocationRelativeTo(this);
@@ -236,12 +244,18 @@ public class PixelDrawer extends JFrame implements ActionListener {
 		return p;
 	}
 	
-	private void drawPixel() {
-		Pixel p = createPixel();
+	@Override
+	public void paint(Graphics g) {
+		g.setColor(new Color(this.p.getColourR(), this.p.getColourG(), this.p.getColourB()));
+		g.drawRect(this.p.getPositionX(), this.p.getPositionY(), 100, 50);
 		
+	}
+	
+	private void drawPixel() {
+		this.p = createPixel();
+
 		//If there's no mistake
 		if (p != null) {
-			
 		}
 	}
 	
