@@ -26,7 +26,7 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	private static int canvasWidth = width - optionsPanelWidth;
 	private static int height = 576;
 	private static Dimension buttonDimensions = new Dimension(100, 28);
-	private static Dimension dialogDimensions = new Dimension(450, 253);
+	private static Dimension dialogDimensions = new Dimension(450, 120);
 	
 	private JTextField jtfx;
 	private JTextField jtfy;
@@ -196,13 +196,18 @@ public class PixelDrawer extends JFrame implements ActionListener {
 	private void errorDialog(String s) {
 		d = new JDialog(this, "Error");
 		JPanel jp = new JPanel();
+		jp.setLayout(new GridLayout(2,1));
+		JPanel j1 = new JPanel();
+		JPanel j2 = new JPanel();
 		JLabel jl = new JLabel(s);
 		JButton bc = new JButton("Close");
 		bc.setPreferredSize(buttonDimensions);
 		bc.addActionListener(this);
 		jl.setFont(jl.getFont().deriveFont(Font.BOLD));
-		jp.add(jl);
-		jp.add(bc);
+		j1.add(jl);
+		j2.add(bc);
+		jp.add(j1);
+		jp.add(j2);
 		d.add(jp);
 		d.setSize(dialogDimensions);
 		d.setResizable(false);
